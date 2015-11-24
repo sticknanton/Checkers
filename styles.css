@@ -1,0 +1,29 @@
+body{
+  background-color: lightblue;
+}
+
+.viewBoard{
+  width: 460px;
+
+  position: relative;
+}
+.square{
+    width :50px;
+    height :50px;
+    position:relative;
+    float : left;
+    border:1px solid black;
+}
+
+.movable{
+  border: 1px solid yellow;
+}
+
+#r
+{
+  position : relative;
+  width : 40px;
+  height: 40px;
+  margin-left:10%;
+  margin-top:10%;
+}
