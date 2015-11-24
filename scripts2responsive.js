@@ -2,17 +2,15 @@ console.log("...loaded");
 
 
   var board = [];
-  //var boardDivs = [];
   var turn = 'b';
   var divNumber = 0;
   bPieces = 12;
-  rPieces = 12;
+  rPieces = 1;
   //currentPlayer = currentPlayer%2 + 1
   currentRow=0;
   currentCol=0;
   for (var i=0;i<8;i++) {
      board[i] = [];
-    // boardDivs[i] = [];
   }
 var viewBoard = $('.viewBoard');
 
@@ -21,51 +19,31 @@ setBoard = function(){
   for (var row = 0; row < 8; row++) {
     for (var column = 0; column < 8; column++) {
 
-      var redChecker = $('<img id = "r" src="plainredchecker.png" />').css({
-        'width' : '40px',
-        'height': '40px',
-        'position' : 'relative',
-        'margin-left':'10%',
-        'margin-top':'10%',
+      var redChecker = $('<img id = "token" src="plainredchecker.png" />');
+      var blackChecker = $('<img id = "token" src="plainblackchecker.png" />')
 
-      })
-      var blackChecker = $('<img id = "r" src="plainblackchecker.png" />').css({
-        'width' : '40px',
-        'height': '40px',
-        'position' : 'relative',
-        'margin-left':'10%',
-        'margin-top':'10%'
-      })
-
-      if(((row%2==0)&&(column%2!==0)||(row%2!==0)&&(column%2==0))&&row!=3&&row!=4)
-        {if(row<3){
+      if(((row%2==0)&&(column%2!==0)||(row%2!==0)&&(column%2==0))&&row!=3&&row!=4){
+          if(row<3){
             board[row][column]={piece:'b',king:false,dive:$('<div>')};
             board[row][column].dive.append($(blackChecker));
-
-            //boardDivs[row][column].append($(blackChecker))
           }
           else{
             board[row][column]={piece:'r',king:false,dive:$('<div>')};
             board[row][column].dive.append($(redChecker));
-
-             //boardDivs[row][column].append($(redChecker))
            }
-        }
-      else
-      {board[row][column]={piece:'',king:false,dive:$('<div>')}
-
-
-    };
-
+      }
+      else{
+        board[row][column]={piece:'',king:false,dive:$('<div>')}
+      }
       if((row%2==0)&&(column%2!==0)||(row%2!==0)&&(column%2==0)){
-      board[row][column].dive.css({
-        'background-color':'black'
-      });
-    }
+        board[row][column].dive.css({
+          'background-color':'black'
+          });
+      }
       else {
         board[row][column].dive.css({
           'background-color':'red'
-        });
+          });
       }
       board[row][column].dive.attr('class','square');
       board[row][column].dive.data('row',row);
@@ -82,6 +60,7 @@ setBoard();
 $( ".square" ).click(function(e) {
   if( $(e.target).hasClass('movable'))
   {return}                    /// CLEARS MOVEABLES IF YOU SELECT A DIFFERENT PIECE
+
   $('.movable').removeClass('movable');
 
     if(turn==board[$(this).data('row')][$(this).data('col')].piece)
@@ -94,16 +73,17 @@ $( ".square" ).click(function(e) {
       }
 });
 
+
 findMovable = function(){
   if (board[currentRow][currentCol].piece=='r')
   {
     if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-    { var upRight = board[currentRow-1][currentCol+1].piece;
+     var upRight = board[currentRow-1][currentCol+1].piece;
         if(upRight =='')
           {
             board[currentRow-1][currentCol+1].dive.addClass('movable');
           }
-    }
+
     if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
       var upLeft = board[currentRow-1][currentCol-1].piece;
         if(upLeft =='')
@@ -131,25 +111,18 @@ findMovable = function(){
   {
     if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
       var downRight = board[currentRow+1][currentCol+1].piece;
-     //directionally based variable
-    if(downRight =='')
-      {
+    if(downRight ==''){
         board[currentRow+1][currentCol+1].dive.addClass('movable');
-      }
+    }
     if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-    var downLeft = board[currentRow+1][currentCol-1].piece;
-       //directionally based variable
-      if(downLeft =='')
-        {
+      var downLeft = board[currentRow+1][currentCol-1].piece;
+      if(downLeft ==''){
           board[currentRow+1][currentCol-1].dive.addClass('movable');
         }
 
     //BUT what if there's a king?!?!
-    if(board[currentRow][currentCol].king)
-        {
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-            {    var upRight = board[currentRow-1][currentCol+1].piece;
-           //directionally based variable
+    if(board[currentRow][currentCol].king){
+          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7)){                      var upRight = board[currentRow-1][currentCol+1].piece;
           if(upRight =='')
             {
               board[currentRow-1][currentCol+1].dive.addClass('movable');
@@ -157,9 +130,7 @@ findMovable = function(){
           }
           if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
             var upLeft = board[currentRow-1][currentCol-1].piece;
-             //directionally based variable
-            if(upLeft =='')
-              {
+            if(upLeft ==''){
                 board[currentRow-1][currentCol-1].dive.addClass('movable');
               }
         }
@@ -257,15 +228,13 @@ $('.viewBoard').on('click','.movable',function(e){
 
     var moveRow= parseInt($(this).data('row'));
     var moveCol= parseInt($(this).data('col'));
-    if($(e.target).hasClass('jump'))
+    if($(e.target).hasClass('jump')){
       var jumpMove=true;
+    }
       var jumpAgain=false;
     var img = board[currentRow][currentCol].dive.find('img');
     $(board[moveRow][moveCol].dive).append(img);
-
     board[moveRow][moveCol].piece=board[currentRow][currentCol].piece;
-
-
     board[currentRow][currentCol].piece='';
 
     if(jumpMove)
@@ -288,10 +257,10 @@ $('.viewBoard').on('click','.movable',function(e){
       else
         bPieces--;
 
-      if(bPieces==0||rPieces==0)
+      if(bPieces==0||rPieces==0){
       endGame();
-
-
+      return
+      }
       if(board[currentRow][currentCol].king){
         currentRow=moveRow;
         currentCol=moveCol;
@@ -301,47 +270,20 @@ $('.viewBoard').on('click','.movable',function(e){
         currentRow=moveRow;
         currentCol=moveCol;
       $('.movable').removeClass('movable');
+      checkKing(moveRow,moveCol);
     jumpAgain = findJump();
     }
 
-    if(moveRow==0||moveRow==7) /////Handle the kings and theier respective pictures
-      {board[moveRow][moveCol].king=true;
-        if(board[moveRow][moveCol].piece=='r')
-          {
-            var rimg = board[moveRow][moveCol].dive.find('img')
-            $(rimg).remove();
-            rimg = $('<img id = "r" src="kingredchecker.png" />').css({
-              'width' : '40px',
-              'height': '40px',
-              'position' : 'relative',
-              'margin-left':'10%',
-              'margin-top':'10%'
-            })
-          board[moveRow][moveCol].dive.append($(rimg));
-          }
-        else if(board[moveRow][moveCol].piece=='b')
-          {
-            img = board[moveRow][moveCol].dive.find('img')
-            $(img).remove();
-            img = $('<img id = "r" src="kingblackchecker.png" />').css({
-              'width' : '40px',
-              'height': '40px',
-              'position' : 'relative',
-              'margin-left':'10%',
-              'margin-top':'10%'
-            })
-            board[moveRow][moveCol].dive.append($(img));
-          }
-      }
+  checkKing(moveRow,moveCol);
 
 
       if(jumpAgain)
         return;
-        // if(board[currentRow][currentCol].king)
-        //     {
-        //       board[currentRow][currentCol].king=false;
-        //       board[moveRow][moveCol].king=true;
-        //     }
+         if(board[currentRow][currentCol].king)
+             {
+               board[currentRow][currentCol].king=false;
+               board[moveRow][moveCol].king=true;
+             }
         $('.movable').removeClass('movable');
     $('.jump').removeClass('jump');
 
@@ -353,13 +295,49 @@ $('.viewBoard').on('click','.movable',function(e){
 
   if (turn=='b'){
     turn='r';
+    $('#turn-display').text("Red's Turn!")
   }
   else{
   turn='b';
+  $('#turn-display').text("Black's Turn!")
   }
 });
 
+$(".again").click(function(){
+  location.reload();
+});
 
 endGame = function(){
+  if (turn=='b'){
+    turn='r';
+    $('#turn-display').text("Black Wins!")
+  }
+  else{
+  turn='b';
+  $('#turn-display').text("Red wins!")
   $('.viewBoard').append($('<h1>').text("Congratulations!"));
+  }
+  $( ".viewBoard" ).fadeOut( "10000", function(){});
+    $(".again").append($('<button id="again">').text('Play again?'));
+}
+
+checkKing= function(moveRow,moveCol)
+{
+  if(moveRow==0||moveRow==7) /////Handle the kings and their respective pictures
+    {board[moveRow][moveCol].king=true;
+      if(board[moveRow][moveCol].piece=='r')
+        {
+          var rimg = board[moveRow][moveCol].dive.find('img')
+          $(rimg).remove();
+          rimg = $('<img id = "token" src="kingredchecker.png" />')
+        board[moveRow][moveCol].dive.append($(rimg));
+        }
+      else if(board[moveRow][moveCol].piece=='b')
+        {
+          img = board[moveRow][moveCol].dive.find('img')
+          $(img).remove();
+          img = $('<img id = "token" src="kingblackchecker.png" />')
+          board[moveRow][moveCol].dive.append($(img));
+        }
+    }
 }

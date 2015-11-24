@@ -1,0 +1,45 @@
+*{
+  box-sizing: border-box;
+}
+body{
+  background-color: slategrey;
+  background: url('http://kid101.com/wp-content/uploads/2015/05/nyc-parks.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+}
+
+.viewBoard{
+  height:70vh;
+  width: 70vh;
+  position: relative;
+  margin: 5% auto;
+  text-align: center;
+}
+.square{
+    width :12.5%;
+    height :12.5%;
+    position:relative;
+    float : left;
+    border: 1px solid black;
+}
+
+.movable{
+  border: 1px solid yellow;
+}
+#token{
+  width : 90%;
+  height: 90%;
+  position : relative;
+  margin-left:5%;
+  margin-top:5%;
+
+}
+#again{
+  width: 25vh;
+  height: 10vh;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+}
