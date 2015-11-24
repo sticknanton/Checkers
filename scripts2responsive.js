@@ -5,7 +5,7 @@ console.log("...loaded");
   var turn = 'b';
   var divNumber = 0;
   bPieces = 12;
-  rPieces = 1;
+  rPieces = 12;
   //currentPlayer = currentPlayer%2 + 1
   currentRow=0;
   currentCol=0;
@@ -241,24 +241,25 @@ $('.viewBoard').on('click','.movable',function(e){
     {
       if(moveRow>currentRow)
         var jumpRow=currentRow+1;
-        else
-        var jumpRow=currentRow-1;
+          else
+            var jumpRow=currentRow-1;
       if(moveCol>currentCol)
         var jumpCol=currentCol+1;
-        else
-        var jumpCol=currentCol-1;
+          else
+            var jumpCol=currentCol-1;
 
       img = board[jumpRow][jumpCol].dive.find('img')
       $(img).remove();
       board[jumpRow][jumpCol].piece='';
       board[jumpRow][jumpCol].king=false;
+
       if(turn=='b')
         rPieces--;
       else
         bPieces--;
 
       if(bPieces==0||rPieces==0){
-      endGame();
+        endGame();
       return
       }
       if(board[currentRow][currentCol].king){
@@ -266,9 +267,10 @@ $('.viewBoard').on('click','.movable',function(e){
         currentCol=moveCol;
         board[currentRow][currentCol].king=true;
       }
-      else
+      else{
         currentRow=moveRow;
         currentCol=moveCol;
+      }
       $('.movable').removeClass('movable');
       checkKing(moveRow,moveCol);
     jumpAgain = findJump();
@@ -284,7 +286,7 @@ $('.viewBoard').on('click','.movable',function(e){
                board[currentRow][currentCol].king=false;
                board[moveRow][moveCol].king=true;
              }
-        $('.movable').removeClass('movable');
+    $('.movable').removeClass('movable');
     $('.jump').removeClass('jump');
 
     for (var row = 0; row < 8; row++) {
@@ -309,14 +311,13 @@ $(".again").click(function(){
 
 endGame = function(){
   if (turn=='b'){
-    turn='r';
     $('#turn-display').text("Black Wins!")
   }
   else{
-  turn='b';
   $('#turn-display').text("Red wins!")
   $('.viewBoard').append($('<h1>').text("Congratulations!"));
   }
+
   $( ".viewBoard" ).fadeOut( "10000", function(){});
     $(".again").append($('<button id="again">').text('Play again?'));
 }
