@@ -3,10 +3,8 @@ console.log("...loaded");
 
   var board = [];
   var turn = 'b';
-  var divNumber = 0;
   bPieces = 12;
   rPieces = 12;
-  //currentPlayer = currentPlayer%2 + 1
   currentRow=0;
   currentCol=0;
   for (var i=0;i<8;i++) {
@@ -60,8 +58,7 @@ setBoard();
 $( ".square" ).click(function(e) {
   if( $(e.target).hasClass('movable'))
   {return}                    /// CLEARS MOVEABLES IF YOU SELECT A DIFFERENT PIECE
-
-  $('.movable').removeClass('movable');
+  $('.movable').removeClass('movable');////// YEAH
 
     if(turn==board[$(this).data('row')][$(this).data('col')].piece)
       {
@@ -75,7 +72,7 @@ $( ".square" ).click(function(e) {
 
 
 findMovable = function(){
-  if (board[currentRow][currentCol].piece=='r')
+  if (board[currentRow][currentCol].piece=='r'||board[currentRow][currentCol].king)
   {
     if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
      var upRight = board[currentRow-1][currentCol+1].piece;
@@ -90,7 +87,8 @@ findMovable = function(){
           {
             board[currentRow-1][currentCol-1].dive.addClass('movable');
           }
-    if(board[currentRow][currentCol].king)   //BUT WHAT IF THERE"S A KING?
+  }
+    if(board[currentRow][currentCol].piece=='b'||board[currentRow][currentCol].king)   //BUT WHAT IF THERE"S A KING?
       {
         if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
           var downRight = board[currentRow+1][currentCol+1].piece;
@@ -104,124 +102,61 @@ findMovable = function(){
               {
                 board[currentRow+1][currentCol-1].dive.addClass('movable');
               }
-    }//END BUT WHAT IF THERE"S A KING?
-  }//end red piece movement
-
-  if (board[currentRow][currentCol].piece=='b')
-  {
-    if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-      var downRight = board[currentRow+1][currentCol+1].piece;
-    if(downRight ==''){
-        board[currentRow+1][currentCol+1].dive.addClass('movable');
     }
-    if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-      var downLeft = board[currentRow+1][currentCol-1].piece;
-      if(downLeft ==''){
-          board[currentRow+1][currentCol-1].dive.addClass('movable');
-        }
-
-    //BUT what if there's a king?!?!
-    if(board[currentRow][currentCol].king){
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7)){                      var upRight = board[currentRow-1][currentCol+1].piece;
-          if(upRight =='')
-            {
-              board[currentRow-1][currentCol+1].dive.addClass('movable');
-            }
-          }
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-            var upLeft = board[currentRow-1][currentCol-1].piece;
-            if(upLeft ==''){
-                board[currentRow-1][currentCol-1].dive.addClass('movable');
-              }
-        }
-  }//end black piece movement
 }//end find movable
+
 findJump =function(){
  var jumpAgain = false;
-  if (turn=='b')//black's turn
-  {
+  if (turn=='b'||board[currentRow][currentCol].king){
     if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
       var downRight = board[currentRow+1][currentCol+1].piece;
-     //directionally based variable
-      if(((currentRow+2)>=0)&&((currentRow+2)<=7)&&((currentCol+2)>=0)&&((currentCol+2)<=7))
-      if(downRight=='r'&&(board[currentRow+2][currentCol+2].piece==''))
-        {
-          board[currentRow+2][currentCol+2].dive.addClass('movable').addClass('jump');
-          jumpAgain=true;
-        }
+        if(((currentRow+2)>=0)&&((currentRow+2)<=7)&&((currentCol+2)>=0)&&((currentCol+2)<=7))
+          if(downRight!=''&&downRight!=board[currentRow][currentCol].piece&&(board[currentRow+2][currentCol+2].piece=='')){
+            board[currentRow+2][currentCol+2].dive.addClass('movable').addClass('jump');
+            jumpAgain=true;
+          }
     if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-    var downLeft = board[currentRow+1][currentCol-1].piece;
+      var downLeft = board[currentRow+1][currentCol-1].piece;
         if(((currentRow+2)>=0)&&((currentRow+2)<=7)&&((currentCol-2)>=0)&&((currentCol-2)<=7))
-        if(downLeft=='r'&&(board[currentRow+2][currentCol-2].piece==''))
-          {
+          if(downLeft!=''&&downLeft!=board[currentRow][currentCol].piece&&(board[currentRow+2][currentCol-2].piece==''))
+            {
               board[currentRow+2][currentCol-2].dive.addClass('movable').addClass('jump');
               jumpAgain=true;
-          }
-    //BUT what if there's a king?!?!
-    if(board[currentRow][currentCol].king)
-        {
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-            var upRight = board[currentRow-1][currentCol+1].piece;
-              if(upRight=='r'&&(board[currentRow-2][currentCol+2].piece==''))
-                {
-                  board[currentRow-2][currentCol+2].dive.addClass('movable').addClass('jump');
-                  jumpAgain=true;
-                }
+            }
+  }
+
+  if(turn=='r'||board[currentRow][currentCol].king){
+    if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
+      var upRight = board[currentRow-1][currentCol+1].piece;
+        if(((currentRow-2)>=0)&&((currentRow-2)<=7)&&((currentCol+2)>=0)&&((currentCol+2)<=7))
+          if(upRight!=''&&upRight!=board[currentRow][currentCol].piece&&(board[currentRow-2][currentCol+2].piece==''))
+            {
+              board[currentRow-2][currentCol+2].dive.addClass('movable').addClass('jump');
+              jumpAgain=true;
+            }
 
           if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
             var upLeft = board[currentRow-1][currentCol-1].piece;
               if(((currentRow-2)>=0)&&((currentRow-2)<=7)&&((currentCol-2)>=0)&&((currentCol-2)<=7))
-                if(upLeft=='r'&&(board[currentRow-2][currentCol-2].piece==''))
+                if(upLeft!=''&&upLeft!=board[currentRow][currentCol].piece&&(board[currentRow-2][currentCol-2].piece==''))
                 {
                   board[currentRow-2][currentCol-2].dive.addClass('movable').addClass('jump');
                   jumpAgain=true;
                 }
         }
-      }//ends black turn
-        else//red 's turn'
-        {
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-              var upRight = board[currentRow-1][currentCol+1].piece;
-
-            if(((currentRow-2)>=0)&&((currentRow-2)<=7)&&((currentCol+2)>=0)&&((currentCol+2)<=7))
-              if(upRight=='b'&&(board[currentRow-2][currentCol+2].piece==''))
-              {
-                board[currentRow-2][currentCol+2].dive.addClass('movable').addClass('jump');
-                jumpAgain=true;
-              }
-
-          if(((currentRow-1)>=0)&&((currentRow-1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-            var upLeft = board[currentRow-1][currentCol-1].piece;
-
-          if(((currentRow-2)>=0)&&((currentRow-2)<=7)&&((currentCol-2)>=0)&&((currentCol-2)<=7))
-            if(upLeft=='b'&&(board[currentRow-2][currentCol-2].piece==''))
-              {
-                board[currentRow-2][currentCol-2].dive.addClass('movable').addClass('jump');
-                jumpAgain=true;
-              }
-        if(board[currentRow][currentCol].king)   //BUT WHAT IF THERE"S A KING?
-          {
-            if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol+1)>=0)&&((currentCol+1)<=7))
-              var downRight = board[currentRow+1][currentCol+1].piece;
-              if(((currentRow+2)>=0)&&((currentRow+2)<=7)&&((currentCol+2)>=0)&&((currentCol+2)<=7))
-                if(downRight=='b'&&(board[currentRow+2][currentCol+2].piece==''))
-                  {
-                    board[currentRow+2][currentCol+2].dive.addClass('movable').addClass('jump');
-                    jumpAgain=true;
-                  }
-            if(((currentRow+1)>=0)&&((currentRow+1)<=7)&&((currentCol-1)>=0)&&((currentCol-1)<=7))
-              var downLeft = board[currentRow+1][currentCol-1].piece;
-              if(((currentRow+2)>=0)&&((currentRow+2)<=7)&&((currentCol-2)>=0)&&((currentCol-2)<=7))
-                if(downLeft=='b'&&(board[currentRow+2][currentCol-2].piece==''))
-                  {
-                    board[currentRow+2][currentCol-2].dive.addClass('movable').addClass('jump');
-                    jumpAgain=true;
-                  }
-          }//END BUT WHAT IF THERE"S A KING?
-        }//end red piece movement
-        return jumpAgain;
+    return jumpAgain;
   }//end findJump
 
+changeTurn = function(){
+  if (turn=='b'){
+    turn='r';
+    $('#turn-display').text("Red's Turn!")
+  }
+  else{
+  turn='b';
+  $('#turn-display').text("Black's Turn!")
+  }
+}
 
 $('.viewBoard').on('click','.movable',function(e){
     // e.stopPropagation();
@@ -262,6 +197,7 @@ $('.viewBoard').on('click','.movable',function(e){
         endGame();
       return
       }
+
       if(board[currentRow][currentCol].king){
         currentRow=moveRow;
         currentCol=moveCol;
@@ -278,36 +214,24 @@ $('.viewBoard').on('click','.movable',function(e){
 
   checkKing(moveRow,moveCol);
 
+  if(jumpAgain)
+    return;
 
-      if(jumpAgain)
-        return;
-         if(board[currentRow][currentCol].king)
-             {
-               board[currentRow][currentCol].king=false;
-               board[moveRow][moveCol].king=true;
-             }
-    $('.movable').removeClass('movable');
-    $('.jump').removeClass('jump');
-
-    for (var row = 0; row < 8; row++) {
-      for (var column = 0; column < 8; column++) {
-        viewBoard.append($(board[row][column].dive));
+  if(board[currentRow][currentCol].king){
+    board[currentRow][currentCol].king=false;
+    board[moveRow][moveCol].king=true;
     }
-  }
 
-  if (turn=='b'){
-    turn='r';
-    $('#turn-display').text("Red's Turn!")
-  }
-  else{
-  turn='b';
-  $('#turn-display').text("Black's Turn!")
-  }
-});
+
+  $('.movable').removeClass('movable');
+  $('.jump').removeClass('jump');
+  changeTurn();
+});//ends movable click function
 
 $(".again").click(function(){
   location.reload();
 });
+
 
 endGame = function(){
   if (turn=='b'){
